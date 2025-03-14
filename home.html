@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>24-Hour Film Competition</title>
+  <style>
+    /* Basic reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: black;
+      color: white;
+      overflow: hidden; /* To avoid scrolling */
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      cursor: none; /* Hide default cursor */
+    }
+
+    /* Centered register button */
+    .register-btn {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      border: 5px solid red;
+      border-radius: 50%;
+      color: red;
+      font-size: 20px;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .register-btn:hover {
+      background-color: rgba(255, 0, 0, 0.1);
+    }
+
+    /* Floating boxes */
+    .floating-box {
+      position: absolute;
+      width: 250px;
+      height: 200px;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      border: 2px solid white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 14px;
+      opacity: 0.8;
+      animation: float 10s infinite linear;
+    }
+
+    /* Animating boxes floating */
+    @keyframes float {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(50px, 50px); }
+      50% { transform: translate(100px, 0); }
+      75% { transform: translate(50px, -50px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    /* Hover effect for the cursor */
+    .hover-item {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Color-changing circle cursor */
+    .cursor {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: white;
+      pointer-events: none;
+      transition: background-color 0.2s ease;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Register Button -->
+  <div class="register-btn" onclick="window.location.href='YOUR_GOOGLE_FORM_URL'">
+    Register
+  </div>
+
+  <!-- Floating Boxes -->
+  <div class="floating-box" style="top: 10%; left: 10%;">  
+    <h3>COMPETITION DETAILS</h3>
+    <ul>
+      <li>START-PROMPT RELEASED 10:00 AM - Day 1</li>
+      <li>SUBMIT FILM 10:00 AM - Day 2</li>
+      <li>SCREENING EVENT 9:00 PM - Day 2</li>
+    </ul>
+  </div>
+
+  <div class="floating-box" style="top: 30%; left: 70%;">
+    <h3>ENTRY FEE</h3>
+    <ul>
+      <li>200 DKK</li>
+      <li>Entrance to the competition</li>
+      <li>6 beers at the screening event</li>
+      <li>Chance to win a share of the pooled cash prize from entrance fees</li>
+    </ul>
+  </div>
+
+  <div class="floating-box" style="top: 50%; left: 20%;">
+    <h3>CASH PRIZES</h3>
+    <ul>
+      <li>1st Place: 60% of the prize pot</li>
+      <li>2nd Place: 30% of the prize pot</li>
+      <li>3rd Place: 10% of the prize pot</li>
+    </ul>
+  </div>
+
+  <div class="floating-box" style="top: 70%; left: 40%;">
+    <h3>COMPETITION RULES</h3>
+    <ul>
+      <li>Each entry can have 1-3 people.</li>
+      <li>Film must be exactly 2:40 minutes in length.</li>
+      <li>Only original footage captured during the 24-hour period can be used.</li>
+      <li>Film must be submitted by 10:00 AM on Day 2.</li>
+      <li>Must follow the prompt released at 10:00 AM on Day 1.</li>
+    </ul>
+  </div>
+
+  <!-- Custom cursor -->
+  <div class="cursor" id="cursor"></div>
+
+  <script>
+    // Custom cursor color-changing effect
+    const cursor = document.getElementById('cursor');
+
+    // Function to move the custom cursor
+    document.addEventListener('mousemove', (e) => {
+      const x = e.clientX;
+      const y = e.clientY;
+      cursor.style.left = `${x - cursor.offsetWidth / 2}px`;
+      cursor.style.top = `${y - cursor.offsetHeight / 2}px`;
+    });
+
+    // Function to change cursor color when hovering over items
+    const items = document.querySelectorAll('.hover-item');
+    items.forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        cursor.style.backgroundColor = getRandomColor();
+      });
+    });
+
+    // Function to get a random color
+    function getRandomColor() {
+      const letters = '0123456789ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+  </script>
+
+</body>
+</html>
