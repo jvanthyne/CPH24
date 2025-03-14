@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Floating Circles</title>
+    <title>Wild Competition</title>
     <style>
         /* Basic Reset */
         * {
@@ -13,174 +13,212 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
+            font-family: 'Arial', sans-serif;
+            background-color: #121212; /* Dark background */
+            color: white;
             height: 100vh;
+            overflow: hidden;
+            position: relative;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            margin: 0;
-            position: relative;
-            cursor: pointer;
+            cursor: none; /* Hide the default cursor */
+            user-select: none;
+            text-align: center;
         }
 
-        .circle {
-            background-color: #333; /* Dark color */
-            color: #fff; /* Light text */
+        .cursor {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: red;
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: background-color 0.2s;
+        }
+
+        .register-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 30px 60px;
+            font-size: 36px;
+            background-color: #ff0066;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            z-index: 100;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 0, 102, 0.7);
+            transition: all 0.3s ease;
+        }
+
+        .register-btn:hover {
+            background-color: #ff1a75;
+            box-shadow: 0 0 50px rgba(255, 26, 117, 0.7);
+        }
+
+        /* Organic Shape Base Style */
+        .shape {
+            position: absolute;
             width: 150px;
             height: 150px;
-            border-radius: 50%; /* Circle shape */
+            background-color: #333;
+            border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            text-align: center;
+            color: white;
             font-size: 20px;
-            position: absolute;
+            font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            animation: float 8s infinite ease-in-out;
+            animation-delay: random(1s, 3s);
         }
 
-        .circle:hover {
-            background-color: #444; /* Slight color adjustment on hover */
-        }
-
-        .circle h2 {
-            margin: 0;
-            font-size: 18px;
-        }
-
-        .description {
-            display: none;
-            margin-top: 10px;
-        }
-
-        /* Add random floating effect */
+        /* Floating animation */
         @keyframes float {
-            0% { transform: translate(0, 0); }
-            50% { transform: translate(100px, 100px); }
-            100% { transform: translate(-100px, -100px); }
+            0% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(200px, 200px) rotate(180deg); }
+            100% { transform: translate(-200px, -200px) rotate(360deg); }
         }
 
-        .circle {
-            animation: float 5s infinite ease-in-out;
+        /* Hover effects */
+        .shape:hover {
+            transform: scale(1.3);
+            background-color: #ff0066;
         }
 
-        .circle:nth-child(1) {
-            animation-delay: 0s;
+        .shape h2 {
+            font-size: 16px;
+            letter-spacing: 1px;
         }
 
-        .circle:nth-child(2) {
-            animation-delay: 1s;
-        }
-
-        .circle:nth-child(3) {
-            animation-delay: 2s;
-        }
-
-        /* Popup style */
+        /* Pop-up for the content */
         .popup {
+            display: none;
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 300px;
-            height: 300px;
-            background-color: #333;
-            color: #fff;
-            border-radius: 50%;
-            padding: 20px;
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+            width: 80%;
+            padding: 30px;
+            border-radius: 15px;
+            z-index: 1000;
+            text-align: left;
+            max-width: 600px;
+            animation: popUp 0.5s ease-in-out;
+        }
+
+        /* Pop-up animation */
+        @keyframes popUp {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         .popup h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
+            font-size: 30px;
+            margin-bottom: 20px;
         }
 
         .popup p {
             font-size: 18px;
         }
 
-        /* Background overlay */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 5;
-            display: none;
+        .popup button {
+            background-color: #ff0066;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 20px;
         }
 
+        .popup button:hover {
+            background-color: #ff1a75;
+        }
     </style>
 </head>
 <body>
 
-<div class="circle" onclick="showPopup('Box 1', 'This is a description for box 1. It will appear when clicked.')">
-    <h2>Box 1</h2>
-</div>
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
 
-<div class="circle" onclick="showPopup('Box 2', 'This is a description for box 2. It will appear when clicked.')">
-    <h2>Box 2</h2>
-</div>
+    <!-- Register Button -->
+    <button class="register-btn" onclick="window.location.href = 'https://your-registration-link.com';">
+        REGISTER
+    </button>
 
-<div class="circle" onclick="showPopup('Box 3', 'This is a description for box 3. It will appear when clicked.')">
-    <h2>Box 3</h2>
-</div>
+    <!-- Organic Floating Shapes -->
+    <div class="shape" onclick="showPopup('COMPETITION DETAILS', 'START-PROMPT RELEASED 10:00 AM - Day 1\nSUBMIT FILM 10:00 AM - Day 2\nSCREENING EVENT 9:00 PM - Day 2')">
+        <h2>COMPETITION DETAILS</h2>
+    </div>
 
-<!-- Popup -->
-<div class="overlay" id="overlay"></div>
-<div class="popup" id="popup">
-    <h2 id="popupTitle"></h2>
-    <p id="popupDescription"></p>
-    <button onclick="closePopup()">Close</button>
-</div>
+    <div class="shape" onclick="showPopup('ENTRY FEE', '200 DKK\nEntrance to the competition\n6 beers at the screening event\nChance to win a share of the pooled cash prize from entrance fees')">
+        <h2>ENTRY FEE</h2>
+    </div>
 
-<script>
-    // Function to stop the circles' floating motion once clicked
-    let isClicked = false;
+    <div class="shape" onclick="showPopup('CASH PRIZES', '1st Place: 60% of the prize pot\n2nd Place: 30% of the prize pot\n3rd Place: 10% of the prize pot')">
+        <h2>PRIZES</h2>
+    </div>
 
-    function stopAnimation() {
-        if (!isClicked) {
-            isClicked = true;
-            document.querySelectorAll('.circle').forEach(circle => {
-                circle.style.animation = 'none';
+    <div class="shape" onclick="showPopup('COMPETITION RULES', 'Each entry can have 1-3 people.\nFilm must be exactly 2:40 minutes in length.\nOnly original footage captured during the 24-hour period can be used.\nFilm must be submitted by 10:00 AM on Day 2.\nMust follow the prompt released at 10:00 AM on Day 1.')">
+        <h2>RULES</h2>
+    </div>
+
+    <!-- Pop-up Window -->
+    <div class="popup" id="popup">
+        <h2 id="popup-title"></h2>
+        <p id="popup-description"></p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+
+    <script>
+        // Custom Cursor
+        const cursor = document.getElementById("cursor");
+
+        document.body.addEventListener("mousemove", (e) => {
+            cursor.style.left = e.pageX + "px";
+            cursor.style.top = e.pageY + "px";
+        });
+
+        // Hover color change for clickable objects
+        document.querySelectorAll(".shape").forEach(item => {
+            item.addEventListener("mouseenter", () => {
+                cursor.style.backgroundColor = getRandomColor();
             });
+        });
+
+        // Random color generator
+        function getRandomColor() {
+            const letters = "0123456789ABCDEF";
+            let color = "#";
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
         }
-    }
 
-    // Function to show the popup with the relevant information
-    function showPopup(title, description) {
-        stopAnimation();
-        document.getElementById("popupTitle").textContent = title;
-        document.getElementById("popupDescription").textContent = description;
-        document.getElementById("popup").style.display = 'flex';
-        document.getElementById("overlay").style.display = 'block';
-    }
+        // Show the pop-up window
+        function showPopup(title, description) {
+            document.getElementById("popup-title").textContent = title;
+            document.getElementById("popup-description").textContent = description;
+            document.getElementById("popup").style.display = "block";
+        }
 
-    // Function to close the popup
-    function closePopup() {
-        document.getElementById("popup").style.display = 'none';
-        document.getElementById("overlay").style.display = 'none';
-    }
-
-    // Change cursor color when hovered over a clickable circle
-    document.querySelectorAll('.circle').forEach(circle => {
-        circle.addEventListener('mouseenter', () => {
-            document.body.style.cursor = 'url(https://www.google.com/intl/en/chrome/browser/images/favicon.ico), auto';  // Custom cursor
-        });
-        circle.addEventListener('mouseleave', () => {
-            document.body.style.cursor = 'pointer';
-        });
-    });
-</script>
+        // Close the pop-up window
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
+        }
+    </script>
 
 </body>
 </html>
