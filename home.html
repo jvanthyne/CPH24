@@ -11,7 +11,6 @@
       padding: 0;
       box-sizing: border-box;
     }
-    
     body {
       font-family: Arial, sans-serif;
       background-color: #000;
@@ -19,7 +18,6 @@
       overflow: hidden;
       position: relative;
     }
-    
     /* Custom Cursor */
     .cursor {
       position: fixed;
@@ -33,8 +31,7 @@
       z-index: 1000;
       transition: background-color 0.2s ease;
     }
-    
-    /* Center Button */
+    /* Register Button with Organic Shape */
     .button {
       position: absolute;
       top: 50%;
@@ -48,58 +45,63 @@
       cursor: pointer;
       z-index: 10;
       transition: transform 0.3s;
+      /* Organic blob shape */
+      clip-path: polygon(20% 0%, 80% 0%, 100% 30%, 80% 70%, 20% 70%, 0% 30%);
     }
-    
     .button:hover {
       transform: translate(-50%, -50%) scale(1.1);
     }
-    
-    /* Shapes */
+    /* Organic Shapes */
     .shape {
       position: absolute;
       width: 150px;
       height: 150px;
-      border-radius: 50%;
+      /* Organic blob shape via clip-path */
+      clip-path: polygon(47% 0%, 70% 14%, 100% 40%, 82% 75%, 52% 100%, 25% 80%, 0% 50%, 18% 15%);
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       font-size: 16px;
       cursor: pointer;
       z-index: 5;
-      transition: all 0.5s ease;
+      transition: transform 0.5s ease, top 0.5s ease, left 0.5s ease;
       text-align: center;
       padding: 10px;
     }
-    
     .shape.enlarged {
       width: 300px;
       height: 300px;
     }
-    
-    /* Specific shape colors */
+    /* Specific shape background colors */
     .shape1 { background-color: #FF6F61; }
     .shape2 { background-color: #6B8E23; }
     .shape3 { background-color: #3B9F9F; }
     .shape4 { background-color: #8A2BE2; }
-    
-    /* Descriptions inside shapes */
+    /* Smooth description fade */
     .description {
-      display: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+      margin-top: 10px;
       color: white;
       font-size: 14px;
-      margin-top: 10px;
+      max-height: 0;
+      overflow: hidden;
     }
-    
+    .shape.enlarged .description {
+      opacity: 1;
+      pointer-events: auto;
+      max-height: 200px;
+    }
     /* Initial positions for shapes */
     .shape1 { top: 20%; left: 10%; }
     .shape2 { top: 40%; left: 30%; }
     .shape3 { top: 60%; left: 70%; }
     .shape4 { top: 80%; left: 50%; }
-    
     .shape:hover {
       transform: scale(1.1);
     }
-    
     /* Responsive adjustments */
     @media (max-width: 768px) {
       .button {
@@ -122,10 +124,10 @@
   <!-- Custom Cursor -->
   <div class="cursor" id="cursor"></div>
   
-  <!-- Center Button -->
+  <!-- Register Button -->
   <button class="button" onclick="window.location.href='registration_page.html'">REGESTER</button>
   
-  <!-- Shapes -->
+  <!-- Organic Shapes -->
   <div class="shape shape1" id="shape1">
     COMPETITION DETAILS
     <div class="description">
@@ -169,7 +171,6 @@
     // Custom Cursor functionality
     const cursor = document.getElementById('cursor');
     
-    // Update cursor position (used for both mouse and touch)
     function updateCursorPosition(x, y) {
       cursor.style.top = y + 'px';
       cursor.style.left = x + 'px';
@@ -186,7 +187,7 @@
       updateCursorPosition(touch.clientX, touch.clientY);
     });
     
-    // Change cursor color on hover for clickable elements (shapes and button)
+    // Change cursor color on hover for clickable elements
     const clickableItems = document.querySelectorAll('.shape, .button');
     clickableItems.forEach(item => {
       item.addEventListener('mouseenter', () => {
@@ -195,24 +196,18 @@
       });
     });
     
-    // Toggle enlargement and description on shape click
+    // Toggle shape enlargement and smooth description fade
     const shapes = document.querySelectorAll('.shape');
     shapes.forEach(shape => {
       shape.addEventListener('click', (e) => {
-        // Prevent bubbling so only the shape's event is triggered
         e.stopPropagation();
         shape.classList.toggle('enlarged');
-        const desc = shape.querySelector('.description');
-        if (desc) {
-          desc.style.display = (desc.style.display === 'block') ? 'none' : 'block';
-        }
       });
     });
     
     // Randomize positions for shapes on desktop (disable on mobile)
     function randomizePosition() {
       shapes.forEach(shape => {
-        // Do not randomize if the shape is enlarged (to let the description be read)
         if (!shape.classList.contains('enlarged')) {
           const randomTop = Math.floor(Math.random() * 80) + '%';
           const randomLeft = Math.floor(Math.random() * 80) + '%';
@@ -223,7 +218,7 @@
     }
     
     if (window.innerWidth > 768) {
-      setInterval(randomizePosition, 2000); // Update positions every 2 seconds on larger screens
+      setInterval(randomizePosition, 2000);
     }
   </script>
 </body>
