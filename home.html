@@ -53,8 +53,8 @@
       z-index: 5;
       text-align: center;
       overflow: visible; /* ensure overlay isn't clipped */
-      /* Smooth slow transition for position changes */
-      transition: transform 0.5s ease, top 10s ease-in-out, left 10s ease-in-out;
+      /* Smooth, continuous movement */
+      transition: top 10s ease-in-out, left 10s ease-in-out;
     }
     /* Shape images */
     .shape-image {
@@ -80,7 +80,7 @@
     }
     .shape5-overlay.active {
       display: block;
-      /* Shifts the overlay further to the right and slightly up */
+      /* Shift overlay further to the right (30px) and slightly up (-10px) */
       transform: translate(30px, -10px);
     }
     /* Centered description text inside overlay */
@@ -189,7 +189,7 @@
   </div>
   
   <!-- Background Audio (Replace 'your_song.mp3' with your MP3 file path) -->
-  <audio id="background-audio" loop>
+  <audio id="background-audio">
     <source src="your_song.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
@@ -234,7 +234,7 @@
       });
     });
     
-    // Slowly float shapes by updating their positions smoothly
+    // Constant movement: update positions every 10 seconds
     function randomizePosition() {
       shapes.forEach(shape => {
         if (!shape.classList.contains('enlarged')) {
@@ -245,8 +245,6 @@
         }
       });
     }
-    
-    // Use a longer interval for smooth movement (10 seconds)
     if (window.innerWidth > 768) {
       setInterval(randomizePosition, 10000);
     }
@@ -258,6 +256,13 @@
       audio.play().catch(err => console.log("Audio play error:", err));
       this.removeEventListener('click', playAudioOnce);
     }, { once: true });
+    
+    // Loop audio at 60 seconds:
+    audio.addEventListener('timeupdate', () => {
+      if (audio.currentTime >= 60) {
+        audio.currentTime = 0;
+      }
+    });
     
     const muteButton = document.getElementById('mute-button');
     muteButton.addEventListener('click', () => {
