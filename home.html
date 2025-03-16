@@ -45,7 +45,7 @@
     .button:hover {
       transform: translate(-50%, -50%) scale(1.1);
     }
-    /* Shape containers */
+    /* Shape container */
     .shape {
       position: absolute;
       width: 150px;
@@ -74,12 +74,26 @@
       transition: opacity 0.5s ease;
       pointer-events: none;
     }
+    .shape.enlarged .description {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    /* New style for the description text when toggled (shape5) */
+    .description.shape5 {
+      clip-path: polygon(15% 0%, 85% 0%, 100% 50%, 85% 100%, 15% 100%, 0% 50%);
+      background: rgba(255, 255, 255, 0.9);
+      color: #000;
+      padding: 10px;
+      border-radius: 10px;
+      /* Adjust position to ensure full visibility */
+      bottom: 10px;
+      left: 10px;
+      width: calc(100% - 20px);
+    }
+    /* Enlarged shape dimensions */
     .shape.enlarged {
       width: 300px;
       height: 300px;
-    }
-    .shape.enlarged .description {
-      opacity: 1;
     }
     /* Initial positions for shapes */
     #shape1 { top: 20%; left: 10%; }
@@ -174,16 +188,13 @@
   <script>
     // Custom Cursor functionality
     const cursor = document.getElementById('cursor');
-    
     function updateCursorPosition(x, y) {
       cursor.style.top = y + 'px';
       cursor.style.left = x + 'px';
     }
-    
     document.addEventListener('mousemove', (e) => {
       updateCursorPosition(e.clientX, e.clientY);
     });
-    
     document.addEventListener('touchmove', (e) => {
       let touch = e.touches[0];
       updateCursorPosition(touch.clientX, touch.clientY);
@@ -198,12 +209,16 @@
       });
     });
     
-    // Toggle enlargement of shapes on click
+    // Toggle shape enlargement and switch description style to shape5
     const shapes = document.querySelectorAll('.shape');
     shapes.forEach(shape => {
       shape.addEventListener('click', (e) => {
         e.stopPropagation();
         shape.classList.toggle('enlarged');
+        const desc = shape.querySelector('.description');
+        if (desc) {
+          desc.classList.toggle('shape5');
+        }
       });
     });
     
@@ -218,16 +233,14 @@
         }
       });
     }
-    
     if (window.innerWidth > 768) {
       setInterval(randomizePosition, 2000);
     }
     
     // Audio and Mute Button functionality
     const audio = document.getElementById('background-audio');
-    // Optionally autoplay the audio (if allowed by browser policies)
+    // Uncomment the following line to autoplay the audio (if allowed by browser policies)
     // audio.play();
-    
     const muteButton = document.getElementById('mute-button');
     muteButton.addEventListener('click', () => {
       audio.muted = !audio.muted;
