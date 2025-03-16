@@ -51,9 +51,10 @@
       width: 150px;
       height: 150px;
       z-index: 5;
-      transition: transform 0.5s ease, top 0.5s ease, left 0.5s ease;
       text-align: center;
       overflow: visible; /* ensure overlay isn't clipped */
+      /* Smooth slow transition for position changes */
+      transition: transform 0.5s ease, top 10s ease-in-out, left 10s ease-in-out;
     }
     /* Shape images */
     .shape-image {
@@ -233,7 +234,7 @@
       });
     });
     
-    // Randomize positions for shapes on desktop (disabled on mobile)
+    // Slowly float shapes by updating their positions smoothly
     function randomizePosition() {
       shapes.forEach(shape => {
         if (!shape.classList.contains('enlarged')) {
@@ -244,8 +245,10 @@
         }
       });
     }
+    
+    // Use a longer interval for smooth movement (10 seconds)
     if (window.innerWidth > 768) {
-      setInterval(randomizePosition, 2000);
+      setInterval(randomizePosition, 10000);
     }
     
     // Audio and Mute Button functionality
