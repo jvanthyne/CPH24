@@ -71,7 +71,7 @@
       height: 100%;
       display: none;
       background: url('shape5.png') no-repeat center center;
-      background-size: contain;
+      background-size: contain; /* ensure full PNG is visible */
       border-radius: 10px;
       padding: 10px;
       z-index: 2;
@@ -80,7 +80,7 @@
     }
     .shape5-overlay.active {
       display: block;
-      /* Shifts the overlay 150px to the right and 10px up */
+      /* Shifts the overlay 150px to the right and -10px upward */
       transform: translate(150px, -10px);
     }
     /* Centered description text inside overlay */
@@ -138,6 +138,7 @@
       }
       .shape5-overlay .description {
         font-size: 12px;
+        overflow: auto;  /* allow scrolling if text exceeds available space */
       }
     }
   </style>
@@ -146,8 +147,8 @@
   <!-- Custom Cursor -->
   <div class="cursor" id="cursor"></div>
   
-  <!-- Register Button (link updated to the provided URL) -->
-  <a href="https://forms.gle/4fsfmPJoDSfmE6Rz5">
+  <!-- Register Button (opens in a new window) -->
+  <a href="https://forms.gle/4fsfmPJoDSfmE6Rz5" target="_blank" rel="noopener noreferrer">
     <img src="register.png" alt="Register" class="button" id="register-button" />
   </a>
   
@@ -248,14 +249,8 @@
     // Constant movement: update positions every 10 seconds, starting 5 seconds after page load.
     window.addEventListener('load', () => {
       setTimeout(() => {
-        if (window.innerWidth > 768) {
-          randomizePosition(); // initial call
-          setInterval(randomizePosition, 10000);
-        } else {
-          // For smaller screens, also update positions but with adjusted values if needed.
-          randomizePosition();
-          setInterval(randomizePosition, 10000);
-        }
+        randomizePosition();
+        setInterval(randomizePosition, 10000);
         // Start audio playback after 5 seconds.
         const audio = document.getElementById('background-audio');
         audio.play().catch(err => console.log("Audio play error:", err));
