@@ -53,7 +53,7 @@
       z-index: 5;
       transition: transform 0.5s ease, top 0.5s ease, left 0.5s ease;
       text-align: center;
-      overflow: visible; /* Ensure overlay is not clipped */
+      overflow: visible; /* ensure overlay isn't clipped */
     }
     /* Shape images */
     .shape-image {
@@ -70,20 +70,27 @@
       height: 100%;
       display: none;
       background: url('shape5.png') no-repeat center center;
-      background-size: contain; /* Ensure full PNG is visible */
+      background-size: contain; /* ensure full PNG is visible */
       border-radius: 10px;
       padding: 10px;
       z-index: 2;
+      transition: transform 0.5s ease, opacity 0.5s ease;
+      transform: translate(0, 0);
     }
     .shape5-overlay.active {
       display: block;
+      transform: translate(10px, -10px); /* shifts slightly right and up */
     }
-    /* Description text inside overlay */
-    .description {
-      position: relative;
-      z-index: 3;
-      color: #000;
+    /* Centered description text inside overlay */
+    .shape5-overlay .description {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      text-align: center;
+      color: #000;  /* dark text for contrast against a light background */
       font-size: 14px;
+      margin: 0;
     }
     /* Enlarged shape dimensions */
     .shape.enlarged {
