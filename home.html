@@ -80,8 +80,8 @@
     }
     .shape5-overlay.active {
       display: block;
-      /* Shift overlay further to the right (30px) and slightly up (-10px) */
-      transform: translate(30px, -10px);
+      /* Shifts the overlay 150px to the right and slightly up (-10px) */
+      transform: translate(150px, -10px);
     }
     /* Centered description text inside overlay */
     .shape5-overlay .description {
@@ -138,7 +138,7 @@
   <div class="cursor" id="cursor"></div>
   
   <!-- Register Button (Replace 'register.png' with your image path) -->
-  <img src="register.png" alt="Register" class="button" id="register-button" onclick="window.location.href='https://forms.gle/hL5tqzmK1V1KwVL6A'" />
+  <img src="register.png" alt="Register" class="button" id="register-button" onclick="window.location.href='registration_page.html'" />
   
   <!-- Shapes (Replace 'shape1.png', etc. with your image paths) -->
   <div class="shape" id="shape1">
@@ -234,7 +234,7 @@
       });
     });
     
-    // Constant movement: update positions every 10 seconds
+    // Start constant movement 5 seconds after page load
     function randomizePosition() {
       shapes.forEach(shape => {
         if (!shape.classList.contains('enlarged')) {
@@ -246,20 +246,21 @@
       });
     }
     if (window.innerWidth > 768) {
-      setInterval(randomizePosition, 10000);
+      setTimeout(() => {
+        randomizePosition(); // initial call after 5 seconds
+        setInterval(randomizePosition, 10000);
+      }, 5000);
     }
     
-    // Audio and Mute Button functionality
+    // Start playing audio 5 seconds after page load (if allowed by browser policies)
     const audio = document.getElementById('background-audio');
-    // Start playing audio on first user interaction (to satisfy autoplay policies)
-    document.addEventListener('click', function playAudioOnce() {
+    setTimeout(() => {
       audio.play().catch(err => console.log("Audio play error:", err));
-      this.removeEventListener('click', playAudioOnce);
-    }, { once: true });
+    }, 5000);
     
     // Loop audio at 60 seconds:
     audio.addEventListener('timeupdate', () => {
-      if (audio.currentTime >= 120) {
+      if (audio.currentTime >= 60) {
         audio.currentTime = 0;
       }
     });
